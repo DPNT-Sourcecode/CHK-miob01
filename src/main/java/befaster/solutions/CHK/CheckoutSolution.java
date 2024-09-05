@@ -73,7 +73,7 @@ public class CheckoutSolution {
             }
             Item item = storeItems.get(entry.getKey());
             if (item.specialOfferQuantity != 0){
-                sumToPay += (entry.getValue()/item.specialOfferQuantity) * item.specialOfferPrice + item.price * entry.getValue() % item.specialOfferQuantity;
+                sumToPay += (entry.getValue()/item.specialOfferQuantity) * item.specialOfferPrice + item.price * (entry.getValue() % item.specialOfferQuantity);
             } else{
                 sumToPay += entry.getValue() * item.price;
             }
@@ -81,5 +81,6 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
 
