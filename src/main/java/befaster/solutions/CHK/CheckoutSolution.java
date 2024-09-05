@@ -51,18 +51,18 @@ class Item{
 
 public class CheckoutSolution {
 
-    private final HashMap<String,Item> storeItems = new HashMap<>();
     private final HashMap<String,Integer> inventoryItems = new HashMap<>();
+    private final Map<String,Item> storeItems = Map.of("A", new Item("A",50,3,130),
+        "B", new Item("B",30,2,45),
+        "C", new Item("C",20,0,0),
+        "D", new Item("D",15,0,0));
 
-    private void initItems(){
-        storeItems.put("A", new Item("A",50,3,130));
-        storeItems.put("B", new Item("B",30,2,45));
-        storeItems.put("C", new Item("C",20,0,0));
-        storeItems.put("D", new Item("D",15,0,0));
-    }
 
     public Integer checkout(String skus) {
         int sumToPay = 0;
+        if (null == skus || skus.trim().isEmpty()){
+            return -1;
+        }
         String[] itemNames = skus.split("[,\\s]+");
         for (String itemName: itemNames){
             inventoryItems.put(itemName,inventoryItems.getOrDefault(itemName,0)+1);
@@ -81,3 +81,4 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
