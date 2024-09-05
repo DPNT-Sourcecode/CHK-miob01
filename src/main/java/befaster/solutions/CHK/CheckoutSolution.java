@@ -81,4 +81,3 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
-
