@@ -60,9 +60,6 @@ public class CheckoutSolution {
 
     public Integer checkout(String skus) {
         int sumToPay = 0;
-        if (null == skus || skus.trim().isEmpty()){
-            return -1;
-        }
         String[] itemNames = skus.split("[,\\s]+");
         for (String itemName: itemNames){
             inventoryItems.put(itemName,inventoryItems.getOrDefault(itemName,0)+1);
@@ -72,7 +69,7 @@ public class CheckoutSolution {
                 return -1;
             }
             Item item = storeItems.get(entry.getKey());
-            if (item.specialOfferQuantity != 0){
+            if (item.specialOfferQuantity != 0  ){
                 sumToPay += (entry.getValue()/item.specialOfferQuantity) * item.specialOfferPrice + item.price * (entry.getValue() % item.specialOfferQuantity);
             } else{
                 sumToPay += entry.getValue() * item.price;
@@ -81,6 +78,7 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
 
 
