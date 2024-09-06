@@ -70,6 +70,7 @@ public class CheckoutSolution {
             }
         });
         if (!allValid){
+            inventoryItems.clear();
             return -1;
         }
         for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()){
@@ -84,6 +85,7 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
 
 
