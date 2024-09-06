@@ -164,9 +164,3 @@ public class CheckoutSolution {
         System.out.println(checkout.checkout("AAAA"));
     }
 }
-
-
-
-
-
-
