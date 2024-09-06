@@ -26,6 +26,7 @@ class SpecialOfferPair{
     public String getSpecialOffer(String price){
         return  price;
     }
+
 }
 
 class Item{
@@ -65,7 +66,7 @@ class Item{
 
     public String hasOffersForOtherProducts(){
         for (SpecialOfferPair offer : offers){
-            if (offer.)
+            if (offer.ge)
         }
     }
 }
@@ -131,4 +132,5 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
