@@ -102,7 +102,7 @@ public class CheckoutSolution {
         if (!allEntriesValid(skus)) {
             return -1;
         }
-        System.out.println(inventoryItems);
+        updateBoughtProducts();
         for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()){
             if (entry.getValue() > 0){
                 sumToPay += getSumForProduct(entry.getKey(),entry.getValue());
@@ -118,14 +118,6 @@ public class CheckoutSolution {
             if (storeItems.containsKey(ch)){
                 int productQuantity = inventoryItems.getOrDefault(ch,0)+1;
                 inventoryItems.put(ch,productQuantity);
-                Item item = storeItems.get(ch);
-                if (item.hasOffersForOtherProducts().isPresent()){
-                    SpecialOfferPair specialOfferPair = item.hasOffersForOtherProducts().get();
-                    if (productQuantity >= specialOfferPair.getQuantity()){
-                        String offerProductKey = (String)specialOfferPair.getPrice();
-                        inventoryItems.put(offerProductKey,inventoryItems.getOrDefault(offerProductKey,0)-1);
-                    }
-                }
                 return true;
             } else{
                 return false;
@@ -136,6 +128,21 @@ public class CheckoutSolution {
             return false;
         }
         return true;
+    }
+
+    private void updateBoughtProducts(){
+        for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()) {
+            int productQuantity = inventoryItems.get(entry.getKey());
+            inventoryItems.put(entry.getKey(),productQuantity);
+            Item item = storeItems.get(entry.getKey());
+            if (item.hasOffersForOtherProducts().isPresent()){
+                SpecialOfferPair specialOfferPair = item.hasOffersForOtherProducts().get();
+                if (productQuantity >= specialOfferPair.getQuantity()){
+                    String offerProductKey = (String)specialOfferPair.getPrice();
+                    inventoryItems.put(offerProductKey,inventoryItems.getOrDefault(offerProductKey,0)-productQuantity/specialOfferPair.getQuantity());
+                }
+            }
+        }
     }
 
     private int getSumForProduct(String product, int quantity){
@@ -157,6 +164,7 @@ public class CheckoutSolution {
         System.out.println(checkout.checkout("AAAA"));
     }
 }
+
 
 
 
