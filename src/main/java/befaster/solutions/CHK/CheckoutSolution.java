@@ -60,10 +60,11 @@ public class CheckoutSolution {
 
     public Integer checkout(String skus) {
         int sumToPay = 0;
-        if (null == skus || skus.trim().isEmpty()){
+        /*if (null == skus || skus.trim().isEmpty()){
             return -1;
         }
-        String[] itemNames = skus.split("[,\\s]+");
+        String[] itemNames = skus.split("[,\\s]+");*/
+        skus.chars().allMatch(c => storeItems.containsKey(c))
         for (String itemName: itemNames){
             inventoryItems.put(itemName,inventoryItems.getOrDefault(itemName,0)+1);
         }
@@ -81,3 +82,4 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
