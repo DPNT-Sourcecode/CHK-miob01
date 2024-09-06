@@ -106,15 +106,17 @@ public class CheckoutSolution {
     }
 
     private int getSumForProduct(String product, int quantity){
+        int sumToPay = 0;
         Item item = storeItems.get(product);
         for (SpecialOfferPair specialOfferPair : item.getOffers().stream().toList()){
-            if (specialOfferPair.getQuantity() != 0  ){
-                sumToPay += (entry.getValue()/item.specialOfferQuantity) * item.specialOfferPrice + item.price * (entry.getValue() % item.specialOfferQuantity);
+            if (quantity >= specialOfferPair.getQuantity()){
+                sumToPay += (quantity/specialOfferPair.getQuantity()) * specialOfferPair.getPrice() + item.getPrice() * (quantity % specialOfferPair.getPrice());
             } else{
-                sumToPay += entry.getValue() * item.price;
+                sumToPay += quantity * item.getPrice();
             }
         }
 
     }
 }
+
 
