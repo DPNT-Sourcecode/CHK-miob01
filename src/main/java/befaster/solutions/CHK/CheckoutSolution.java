@@ -64,10 +64,13 @@ class Item{
         this.offers = offers;
     }
 
-    public String hasOffersForOtherProducts(){
+    public Optional<SpecialOfferPair> hasOffersForOtherProducts(){
         for (SpecialOfferPair offer : offers){
-            if (offer.ge)
+            if (offer.getPrice() instanceof String){
+                return Optional.of(offer);
+            }
         }
+        return Optional.empty();
     }
 }
 
@@ -94,18 +97,9 @@ public class CheckoutSolution {
     }
 
     public Integer checkout(String skus) {
+        initStore();
         int sumToPay = 0;
-        boolean allValid = skus.chars().allMatch( c -> {
-            String ch = (char)c+"";
-            if (storeItems.containsKey(ch)){
-                inventoryItems.put(ch,inventoryItems.getOrDefault(ch,0)+1);
-                return true;
-            } else{
-                return false;
-            }
-        });
-        if (!allValid){
-            inventoryItems.clear();
+        if (!allEntriesValid(skus)) {
             return -1;
         }
         for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()){
@@ -113,6 +107,28 @@ public class CheckoutSolution {
         }
         inventoryItems.clear();
         return sumToPay;
+    }
+
+    private boolean allEntriesValid(String skus){
+        boolean allValid = skus.chars().allMatch( c -> {
+            String ch = (char)c+"";
+            if (storeItems.containsKey(ch)){
+                inventoryItems.put(ch,inventoryItems.getOrDefault(ch,0)+1);
+                Item item = storeItems.get(ch);
+                String offersForOtherProduct = "";
+                if (!item.hasOffersForOtherProducts().isEmpty()){
+
+                }
+                return true;
+            } else{
+                return false;
+            }
+        });
+        if (!allValid){
+            inventoryItems.clear();
+            return false;
+        }
+        return true;
     }
 
     private void addProductsReceivedFromSpecialOffers(){
@@ -132,5 +148,6 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
 
