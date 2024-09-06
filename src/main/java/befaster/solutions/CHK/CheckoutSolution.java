@@ -72,6 +72,19 @@ class Item{
         }
         return Optional.empty();
     }
+
+    public int getPriceForQuantity(int quantityToBuy){
+        int sumToPay = 0;
+        int fullQuantity = quantityToBuy;
+        for (SpecialOfferPair specialOfferPair : getOffers()){
+            if (fullQuantity >= specialOfferPair.getQuantity()){
+                sumToPay += (fullQuantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice();
+                fullQuantity = fullQuantity % specialOfferPair.getQuantity();
+            }
+        }
+        sumToPay += fullQuantity * getPrice();
+        return sumToPay;
+    }
 }
 
 public class CheckoutSolution {
@@ -135,7 +148,7 @@ public class CheckoutSolution {
                 int productQuantity = entry.getValue();
                 if (productQuantity >= specialOfferPair.getQuantity()){
                     String offerProductKey = (String)specialOfferPair.getPrice();
-                    Item offerItem = storeItems.get(offerProductKey)
+                    Item offerItem = storeItems.get(offerProductKey);
                     boughtProducts.put(offerProductKey, boughtProducts.getOrDefault(offerProductKey,0)+1);
                     boughtProducts.put(ch,productQuantity - specialOfferPair.getQuantity());
                 }
@@ -145,19 +158,11 @@ public class CheckoutSolution {
     }
 
     private int getSumForProduct(String product, int quantity){
-        int sumToPay = 0;
         Item item = storeItems.get(product);
-        int fullQuantity = quantity;
-        for (SpecialOfferPair specialOfferPair : item.getOffers()){
-            if (fullQuantity >= specialOfferPair.getQuantity()){
-                sumToPay += (fullQuantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice();
-                fullQuantity = fullQuantity % specialOfferPair.getQuantity();
-            }
-        }
-        sumToPay += fullQuantity * item.getPrice();
-        return sumToPay;
+        return item.getPriceForQuantity(quantity);
     }
 }
+
 
 
 
