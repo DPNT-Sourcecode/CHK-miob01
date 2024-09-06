@@ -121,6 +121,7 @@ public class CheckoutSolution {
                     if (productQuantity >= specialOfferPair.getQuantity()){
                         String offerProductKey = (String)specialOfferPair.getPrice();
                         inventoryItems.put(offerProductKey,inventoryItems.getOrDefault(offerProductKey,0)+1);
+                        inventoryItems.put(ch,productQuantity - specialOfferPair.getQuantity());
                     }
                 }
                 return true;
@@ -135,23 +136,20 @@ public class CheckoutSolution {
         return true;
     }
 
-    private void addProductsReceivedFromSpecialOffers(){
-
-    }
-
     private int getSumForProduct(String product, int quantity){
         int sumToPay = 0;
         Item item = storeItems.get(product);
         for (SpecialOfferPair specialOfferPair : item.getOffers().stream().toList()){
-            //if (quantity >= specialOfferPair.getQuantity()){
-            //   sumToPay += (quantity/specialOfferPair.getQuantity()) * specialOfferPair.getPrice() + item.getPrice() * (quantity % specialOfferPair.getPrice());
-            //} else{
+            if (quantity >= specialOfferPair.getQuantity()){
+               sumToPay += (quantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice() + item.getPrice() * (quantity % (Integer)specialOfferPair.getPrice());
+            } else{
                 sumToPay += quantity * item.getPrice();
-            //}*/
+            }
         }
         return sumToPay;
     }
 }
+
 
 
 
