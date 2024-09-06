@@ -141,7 +141,7 @@ public class CheckoutSolution {
         Item item = storeItems.get(product);
         int fullQuantity = quantity;
         for (SpecialOfferPair specialOfferPair : item.getOffers()){
-            if (fullQuantity >= specialOfferPair.getQuantity()){
+            if (specialOfferPair.getPrice() instanceof String && fullQuantity >= specialOfferPair.getQuantity()){
                 sumToPay += (fullQuantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice();
                 fullQuantity = fullQuantity % specialOfferPair.getQuantity();
             }
@@ -156,5 +156,6 @@ public class CheckoutSolution {
         System.out.println(checkout.checkout("AAAA"));
     }
 }
+
 
 
