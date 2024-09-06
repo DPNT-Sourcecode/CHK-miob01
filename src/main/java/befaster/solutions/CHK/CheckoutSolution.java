@@ -80,8 +80,10 @@ public class CheckoutSolution {
                 sumToPay += entry.getValue() * item.price;
             }
         }
+        inventoryItems.clear();
         return sumToPay;
     }
 }
+
 
 
