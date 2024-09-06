@@ -104,7 +104,9 @@ public class CheckoutSolution {
         }
         System.out.println(inventoryItems);
         for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()){
-            sumToPay += getSumForProduct(entry.getKey(),entry.getValue());
+            if (entry.getValue() > 0){
+                sumToPay += getSumForProduct(entry.getKey(),entry.getValue());
+            }
         }
         inventoryItems.clear();
         return sumToPay;
@@ -146,7 +148,6 @@ public class CheckoutSolution {
                 fullQuantity = fullQuantity % specialOfferPair.getQuantity();
             }
         }
-
         sumToPay += fullQuantity * item.getPrice();
         return sumToPay;
     }
@@ -156,6 +157,7 @@ public class CheckoutSolution {
         System.out.println(checkout.checkout("AAAA"));
     }
 }
+
 
 
 
