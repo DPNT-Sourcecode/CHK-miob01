@@ -103,7 +103,7 @@ public class CheckoutSolution {
             return -1;
         }
         for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()){
-            sumToPay = getSumForProduct(entry.getKey(),entry.getValue());
+            sumToPay += getSumForProduct(entry.getKey(),entry.getValue());
         }
         inventoryItems.clear();
         return sumToPay;
@@ -150,4 +150,5 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
