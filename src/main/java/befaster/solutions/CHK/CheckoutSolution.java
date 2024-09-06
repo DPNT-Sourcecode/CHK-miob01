@@ -18,6 +18,14 @@ class SpecialOfferPair{
     public Object getPrice() {
         return price;
     }
+
+    public Integer getSpecialOffer(Integer price){
+        return  price;
+    }
+
+    public String getSpecialOffer(String price){
+        return  price;
+    }
 }
 
 class Item{
@@ -113,6 +121,3 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
-
-
-
