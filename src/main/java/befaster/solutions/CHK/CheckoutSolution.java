@@ -162,9 +162,3 @@ public class CheckoutSolution {
         return item.getPriceForQuantity(quantity);
     }
 }
-
-
-
-
-
-
