@@ -64,6 +64,9 @@ public class CheckoutSolution {
             return -1;
         }
         String[] itemNames = skus.split("[,\\s]+");
+        boolean allValid = skus.chars().allMatch( c -> {
+            
+        })
         for (String itemName: itemNames){
             inventoryItems.put(itemName,inventoryItems.getOrDefault(itemName,0)+1);
         }
@@ -81,3 +84,4 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
