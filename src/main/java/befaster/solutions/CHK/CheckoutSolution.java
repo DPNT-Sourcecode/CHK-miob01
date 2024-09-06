@@ -149,6 +149,10 @@ public class CheckoutSolution {
                 if (productQuantity >= specialOfferPair.getQuantity()){
                     String offerProductKey = (String)specialOfferPair.getPrice();
                     Item offerItem = storeItems.get(offerProductKey);
+                    int currentQuantity = boughtProducts.getOrDefault(offerProductKey,0)+1;
+
+                    int priceWithoutAddingProductsViaOffer = offerItem.getPriceForQuantity(currentQuantity);
+                    int priceWithProductsViaOffer = offerItem.getPriceForQuantity(currentQuantity);
                     boughtProducts.put(offerProductKey, boughtProducts.getOrDefault(offerProductKey,0)+1);
                     boughtProducts.put(ch,productQuantity - specialOfferPair.getQuantity());
                 }
@@ -162,3 +166,4 @@ public class CheckoutSolution {
         return item.getPriceForQuantity(quantity);
     }
 }
+
