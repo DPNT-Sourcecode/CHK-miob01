@@ -143,13 +143,14 @@ public class CheckoutSolution {
         for (SpecialOfferPair specialOfferPair : item.getOffers()){
             if (fullQuantity >= specialOfferPair.getQuantity()){
                 sumToPay += (fullQuantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice();
-                fullQuantity = fullQuantity % quantity;
+                fullQuantity = fullQuantity % specialOfferPair.getQuantity();
             }
         }
         sumToPay += fullQuantity * item.getPrice();
         return sumToPay;
     }
 }
+
 
 
 
