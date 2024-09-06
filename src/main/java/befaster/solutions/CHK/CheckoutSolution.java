@@ -1,7 +1,7 @@
 package befaster.solutions.CHK;
 
-import java.util.*;
 
+import java.util.*;
 class SpecialOfferPair{
     private final Integer quantity;
     private final Object price;
@@ -72,24 +72,11 @@ class Item{
         }
         return Optional.empty();
     }
-
-    public int getPriceForQuantity(int quantityToBuy){
-        int sumToPay = 0;
-        int fullQuantity = quantityToBuy;
-        for (SpecialOfferPair specialOfferPair : getOffers()){
-            if (fullQuantity >= specialOfferPair.getQuantity()){
-                sumToPay += (fullQuantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice();
-                fullQuantity = fullQuantity % specialOfferPair.getQuantity();
-            }
-        }
-        sumToPay += fullQuantity * getPrice();
-        return sumToPay;
-    }
 }
 
 public class CheckoutSolution {
 
-    private final HashMap<String,Integer> boughtProducts = new HashMap<>();
+    private final HashMap<String,Integer> inventoryItems = new HashMap<>();
     private Map<String,Item> storeItems;
     private void initStore(){
         PriorityQueue<SpecialOfferPair> offersForA = new PriorityQueue<>(Comparator.comparing(SpecialOfferPair::getQuantity).reversed());
@@ -115,10 +102,11 @@ public class CheckoutSolution {
         if (!allEntriesValid(skus)) {
             return -1;
         }
-        for (Map.Entry<String,Integer> entry : boughtProducts.entrySet()){
+        System.out.println(inventoryItems);
+        for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()){
             sumToPay += getSumForProduct(entry.getKey(),entry.getValue());
         }
-        boughtProducts.clear();
+        inventoryItems.clear();
         return sumToPay;
     }
 
@@ -126,44 +114,47 @@ public class CheckoutSolution {
         boolean allValid = skus.chars().allMatch( c -> {
             String ch = (char)c+"";
             if (storeItems.containsKey(ch)){
-                int productQuantity = boughtProducts.getOrDefault(ch,0)+1;
-                boughtProducts.put(ch,productQuantity);
+                int productQuantity = inventoryItems.getOrDefault(ch,0)+1;
+                inventoryItems.put(ch,productQuantity);
+                Item item = storeItems.get(ch);
+                if (item.hasOffersForOtherProducts().isPresent()){
+                    SpecialOfferPair specialOfferPair = item.hasOffersForOtherProducts().get();
+                    if (productQuantity >= specialOfferPair.getQuantity()){
+                        String offerProductKey = (String)specialOfferPair.getPrice();
+                        inventoryItems.put(offerProductKey,inventoryItems.getOrDefault(offerProductKey,0)-1);
+                    }
+                }
                 return true;
             } else{
                 return false;
             }
         });
         if (!allValid){
-            boughtProducts.clear();
+            inventoryItems.clear();
             return false;
         }
         return true;
     }
 
-    private void updateBoughtProducts(){
-        for (Map.Entry<String,Integer> entry : boughtProducts.entrySet()){
-            Item item = storeItems.get(entry.getKey());
-            if (item.hasOffersForOtherProducts().isPresent()){
-                SpecialOfferPair specialOfferPair = item.hasOffersForOtherProducts().get();
-                int productQuantity = entry.getValue();
-                if (productQuantity >= specialOfferPair.getQuantity()){
-                    String offerProductKey = (String)specialOfferPair.getPrice();
-                    Item offerItem = storeItems.get(offerProductKey);
-                    int currentQuantity = boughtProducts.getOrDefault(offerProductKey,0)+1;
-
-                    int priceWithoutAddingProductsViaOffer = offerItem.getPriceForQuantity(currentQuantity);
-                    int priceWithProductsViaOffer = offerItem.getPriceForQuantity(currentQuantity);
-                    boughtProducts.put(offerProductKey, boughtProducts.getOrDefault(offerProductKey,0)+1);
-                    boughtProducts.put(ch,productQuantity - specialOfferPair.getQuantity());
-                }
+    private int getSumForProduct(String product, int quantity){
+        int sumToPay = 0;
+        Item item = storeItems.get(product);
+        int fullQuantity = quantity;
+        for (SpecialOfferPair specialOfferPair : item.getOffers()){
+            if (fullQuantity >= specialOfferPair.getQuantity()){
+                sumToPay += (fullQuantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice();
+                fullQuantity = fullQuantity % specialOfferPair.getQuantity();
             }
         }
 
+        sumToPay += fullQuantity * item.getPrice();
+        return sumToPay;
     }
 
-    private int getSumForProduct(String product, int quantity){
-        Item item = storeItems.get(product);
-        return item.getPriceForQuantity(quantity);
+    public static void main(String args[]){
+        CheckoutSolution checkout = new CheckoutSolution();
+        System.out.println(checkout.checkout("AAAA"));
     }
 }
+
 
