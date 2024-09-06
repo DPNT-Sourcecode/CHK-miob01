@@ -113,11 +113,15 @@ public class CheckoutSolution {
         boolean allValid = skus.chars().allMatch( c -> {
             String ch = (char)c+"";
             if (storeItems.containsKey(ch)){
-                inventoryItems.put(ch,inventoryItems.getOrDefault(ch,0)+1);
+                int productQuantity = inventoryItems.getOrDefault(ch,0)+1;
+                inventoryItems.put(ch,productQuantity);
                 Item item = storeItems.get(ch);
-                String offersForOtherProduct = "";
-                if (!item.hasOffersForOtherProducts().isEmpty()){
-
+                if (item.hasOffersForOtherProducts().isPresent()){
+                    SpecialOfferPair specialOfferPair = item.hasOffersForOtherProducts().get();
+                    if (productQuantity >= specialOfferPair.getQuantity()){
+                        String offerProductKey = (String)specialOfferPair.getPrice();
+                        inventoryItems.put(offerProductKey,inventoryItems.getOrDefault(offerProductKey,0)+1);
+                    }
                 }
                 return true;
             } else{
@@ -148,6 +152,7 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
 
 
