@@ -139,7 +139,7 @@ public class CheckoutSolution {
     private int getSumForProduct(String product, int quantity){
         int sumToPay = 0;
         Item item = storeItems.get(product);
-        for (SpecialOfferPair specialOfferPair : item.getOffers().stream().toList()){
+        for (SpecialOfferPair specialOfferPair : item.getOffers()){
             if (quantity >= specialOfferPair.getQuantity()){
                sumToPay += (quantity/specialOfferPair.getQuantity()) * (Integer)specialOfferPair.getPrice() + item.getPrice() * (quantity % (Integer)specialOfferPair.getPrice());
             } else{
@@ -149,6 +149,7 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
 
 
 
