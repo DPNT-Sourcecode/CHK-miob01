@@ -1,19 +1,36 @@
 package befaster.solutions.CHK;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-class Item{
+class SpecialOfferPair<K,V>{
+    private final K quantity;
+    private final V price;
+
+    public SpecialOfferPair(K quantity, V price) {
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public K getQuantity() {
+        return quantity;
+    }
+
+    public V getPrice() {
+        return price;
+    }
+}
+
+class Item<K,V>{
     int price;
     String name;
-    int specialOfferQuantity;
-    int specialOfferPrice;
 
-    public Item(String name, int price, int specialOfferQuantity, int specialOfferPrice) {
+
+    PriorityQueue<SpecialOfferPair<K,V>> offers;
+
+    public Item(String name, int price, PriorityQueue<SpecialOfferPair<K,V>> offers) {
         this.price = price;
         this.name = name;
-        this.specialOfferQuantity = specialOfferQuantity;
-        this.specialOfferPrice = specialOfferPrice;
+        this.offers = offers;
     }
 
     public int getPrice() {
@@ -32,31 +49,37 @@ class Item{
         this.name = name;
     }
 
-    public int getSpecialOfferQuantity() {
-        return specialOfferQuantity;
+    public PriorityQueue<SpecialOfferPair<K, V>> getOffers() {
+        return offers;
     }
 
-    public void setSpecialOfferQuantity(int specialOfferQuantity) {
-        this.specialOfferQuantity = specialOfferQuantity;
-    }
-
-    public int getSpecialOfferPrice() {
-        return specialOfferPrice;
-    }
-
-    public void setSpecialOfferPrice(int specialOfferPrice) {
-        this.specialOfferPrice = specialOfferPrice;
+    public void setOffers(PriorityQueue<SpecialOfferPair<K, V>> offers) {
+        this.offers = offers;
     }
 }
 
 public class CheckoutSolution {
 
     private final HashMap<String,Integer> inventoryItems = new HashMap<>();
-    private final Map<String,Item> storeItems = Map.of("A", new Item("A",50,3,130),
-            "B", new Item("B",30,2,45),
-            "C", new Item("C",20,0,0),
-            "D", new Item("D",15,0,0));
+    private PriorityQueue<SpecialOfferPair<Integer,Integer>> offersForA;
+    private PriorityQueue<SpecialOfferPair<Integer,Integer>> offersForB;
+    private PriorityQueue<SpecialOfferPair<Integer,String>> offersForE;
+    private Map<String,Item> storeItems;
+    private void initStore(){
+        offersForA = new PriorityQueue<>(Comparator.comparing(SpecialOfferPair<Integer,Integer>::getQuantity).reversed());
+        offersForA.add(new SpecialOfferPair<Integer,Integer>(3,130));
+        offersForA.add(new SpecialOfferPair<Integer,Integer>(5,200));
+        offersForB = new PriorityQueue<>(Comparator.comparing(SpecialOfferPair<Integer,Integer>::getQuantity).reversed()){};
+        offersForB.add(new SpecialOfferPair<Integer,Integer>(2,45));
+        offersForE = new PriorityQueue<>(Comparator.comparing(SpecialOfferPair<Integer,String>::getQuantity).reversed()){};
+        offersForE.add(new SpecialOfferPair<>(2,"B"));
 
+        storeItems = Map.of("A", new Item("A",50,offersForA),
+                "B", new Item("B",30,offersForB),
+                "C", new Item("C",20,new PriorityQueue<>()),
+                "D", new Item("D",15,new PriorityQueue<>()),
+                "E", new Item("E",40, offersForE));
+    }
 
     public Integer checkout(String skus) {
         int sumToPay = 0;
@@ -84,4 +107,17 @@ public class CheckoutSolution {
         inventoryItems.clear();
         return sumToPay;
     }
+
+    private int getSumForProduct(String product){
+        Item item = storeItems.get(product);
+        for (SpecialOfferPair specialOfferPair : item.getOffers()){
+
+        }
+        if (item.specialOfferQuantity != 0  ){
+            sumToPay += (entry.getValue()/item.specialOfferQuantity) * item.specialOfferPrice + item.price * (entry.getValue() % item.specialOfferQuantity);
+        } else{
+            sumToPay += entry.getValue() * item.price;
+        }
+    }
 }
+
