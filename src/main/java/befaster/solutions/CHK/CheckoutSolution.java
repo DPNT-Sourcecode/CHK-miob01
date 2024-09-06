@@ -94,12 +94,7 @@ public class CheckoutSolution {
             return -1;
         }
         for (Map.Entry<String,Integer> entry : inventoryItems.entrySet()){
-            Item item = storeItems.get(entry.getKey());
-            if (item.specialOfferQuantity != 0  ){
-                sumToPay += (entry.getValue()/item.specialOfferQuantity) * item.specialOfferPrice + item.price * (entry.getValue() % item.specialOfferQuantity);
-            } else{
-                sumToPay += entry.getValue() * item.price;
-            }
+            sumToPay = getSumForProduct(entry.getKey(),entry.getValue());
         }
         inventoryItems.clear();
         return sumToPay;
@@ -109,14 +104,15 @@ public class CheckoutSolution {
         int sumToPay = 0;
         Item item = storeItems.get(product);
         for (SpecialOfferPair specialOfferPair : item.getOffers().stream().toList()){
-            if (quantity >= specialOfferPair.getQuantity()){
-                sumToPay += (quantity/specialOfferPair.getQuantity()) * specialOfferPair.getPrice() + item.getPrice() * (quantity % specialOfferPair.getPrice());
-            } else{
+            //if (quantity >= specialOfferPair.getQuantity()){
+            //   sumToPay += (quantity/specialOfferPair.getQuantity()) * specialOfferPair.getPrice() + item.getPrice() * (quantity % specialOfferPair.getPrice());
+            //} else{
                 sumToPay += quantity * item.getPrice();
-            }
+            //}*/
         }
-
+        return sumToPay;
     }
 }
+
 
 
