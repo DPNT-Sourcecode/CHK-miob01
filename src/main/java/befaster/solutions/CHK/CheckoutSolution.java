@@ -62,6 +62,12 @@ class Item{
     public void setOffers(PriorityQueue<SpecialOfferPair> offers) {
         this.offers = offers;
     }
+
+    public String hasOffersForOtherProducts(){
+        for (SpecialOfferPair offer : offers){
+            if (offer.)
+        }
+    }
 }
 
 public class CheckoutSolution {
@@ -108,6 +114,10 @@ public class CheckoutSolution {
         return sumToPay;
     }
 
+    private void addProductsReceivedFromSpecialOffers(){
+
+    }
+
     private int getSumForProduct(String product, int quantity){
         int sumToPay = 0;
         Item item = storeItems.get(product);
@@ -121,3 +131,4 @@ public class CheckoutSolution {
         return sumToPay;
     }
 }
+
